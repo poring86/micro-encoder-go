@@ -1,0 +1,62 @@
+{
+    "sourceFile": "domain/video.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 11,
+            "patches": [
+                {
+                    "date": 1709675510466,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1709675861045,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,4 +11,8 @@\n \n func NewVideo() *Video {\n \treturn &Video{}\n }\n+\n+func Validate() error {\n+\n+}\n"
+                },
+                {
+                    "date": 1709676026426,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,7 +12,7 @@\n func NewVideo() *Video {\n \treturn &Video{}\n }\n \n-func Validate() error {\n+func (video Video) Validate() error {\n \n }\n"
+                },
+                {
+                    "date": 1709676560055,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,7 +12,7 @@\n func NewVideo() *Video {\n \treturn &Video{}\n }\n \n-func (video Video) Validate() error {\n+func (video *Video) Validate() error {\n \n }\n"
+                },
+                {
+                    "date": 1709677859911,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,12 @@\n package domain\n \n-import \"time\"\n+import (\n+\t\"time\"\n \n+\t\"github.com/asaskevich/govalidator\"\n+)\n+\n type Video struct {\n \tID         string\n \tResourceID string\n \tFilePath   string\n@@ -13,6 +17,6 @@\n \treturn &Video{}\n }\n \n func (video *Video) Validate() error {\n-\n+\t_, err := govalidator.ValidateStruct(video)\n }\n"
+                },
+                {
+                    "date": 1709677879817,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,5 +18,11 @@\n }\n \n func (video *Video) Validate() error {\n \t_, err := govalidator.ValidateStruct(video)\n+\n+\tif err != nil {\n+\t\treturn err\n+\t}\n+\n+\treturn nil\n }\n"
+                },
+                {
+                    "date": 1709677945650,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n \t\"github.com/asaskevich/govalidator\"\n )\n \n type Video struct {\n-\tID         string\n+\tID         string `valid:\"uuid\"`\n \tResourceID string\n \tFilePath   string\n \tCreatedAt  time.Time\n }\n"
+                },
+                {
+                    "date": 1709677970558,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n )\n \n type Video struct {\n \tID         string `valid:\"uuid\"`\n-\tResourceID string\n+\tResourceID string `valid:\"notnull\"`\n \tFilePath   string\n \tCreatedAt  time.Time\n }\n \n"
+                },
+                {
+                    "date": 1709677979361,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n \n type Video struct {\n \tID         string `valid:\"uuid\"`\n \tResourceID string `valid:\"notnull\"`\n-\tFilePath   string\n+\tFilePath   string `valid:\"uuid\"`\n \tCreatedAt  time.Time\n }\n \n func NewVideo() *Video {\n"
+                },
+                {
+                    "date": 1709677994960,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,12 +6,12 @@\n \t\"github.com/asaskevich/govalidator\"\n )\n \n type Video struct {\n-\tID         string `valid:\"uuid\"`\n-\tResourceID string `valid:\"notnull\"`\n-\tFilePath   string `valid:\"uuid\"`\n-\tCreatedAt  time.Time\n+\tID         string    `valid:\"uuid\"`\n+\tResourceID string    `valid:\"notnull\"`\n+\tFilePath   string    `valid:\"notnull\"`\n+\tCreatedAt  time.Time `valid:\"notnull\"`\n }\n \n func NewVideo() *Video {\n \treturn &Video{}\n"
+                },
+                {
+                    "date": 1709678013620,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n type Video struct {\n \tID         string    `valid:\"uuid\"`\n \tResourceID string    `valid:\"notnull\"`\n \tFilePath   string    `valid:\"notnull\"`\n-\tCreatedAt  time.Time `valid:\"notnull\"`\n+\tCreatedAt  time.Time `valid:\"-\"`\n }\n \n func NewVideo() *Video {\n \treturn &Video{}\n"
+                },
+                {
+                    "date": 1709678136833,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,8 +12,12 @@\n \tFilePath   string    `valid:\"notnull\"`\n \tCreatedAt  time.Time `valid:\"-\"`\n }\n \n+func init() {\n+\tgovalidator.SetFieldsRequiredByDefault(true)\n+}\n+\n func NewVideo() *Video {\n \treturn &Video{}\n }\n \n"
+                }
+            ],
+            "date": 1709675510466,
+            "name": "Commit-0",
+            "content": "package domain\n\nimport \"time\"\n\ntype Video struct {\n\tID         string\n\tResourceID string\n\tFilePath   string\n\tCreatedAt  time.Time\n}\n\nfunc NewVideo() *Video {\n\treturn &Video{}\n}\n"
+        }
+    ]
+}
