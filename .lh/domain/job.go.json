@@ -1,0 +1,82 @@
+{
+    "sourceFile": "domain/job.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 16,
+            "patches": [
+                {
+                    "date": 1709681279179,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1709681302488,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n \tgovalidator.SetFieldsRequiredByDefault(true)\n }\n \n type Job struct {\n-\tID               string\n+\tID               string `valid:\"uuid\"`\n \tOutputBucketPath string\n \tStatus           string\n \tVideo            *Video\n \tError            string\n"
+                },
+                {
+                    "date": 1709681324585,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,4 +18,8 @@\n \tError            string\n \tCreatedAt        time.Time\n \tUpdatedAt        time.Time\n }\n+\n+func (job *Job) prepare() {\n+\n+}\n"
+                },
+                {
+                    "date": 1709681343318,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,10 +11,10 @@\n }\n \n type Job struct {\n \tID               string `valid:\"uuid\"`\n-\tOutputBucketPath string\n-\tStatus           string\n+\tOutputBucketPath string `valid:\"notnull\"`\n+\tStatus           string `valid:\"notnull\"`\n \tVideo            *Video\n \tError            string\n \tCreatedAt        time.Time\n \tUpdatedAt        time.Time\n"
+                },
+                {
+                    "date": 1709681349413,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n type Job struct {\n \tID               string `valid:\"uuid\"`\n \tOutputBucketPath string `valid:\"notnull\"`\n \tStatus           string `valid:\"notnull\"`\n-\tVideo            *Video\n+\tVideo            *Video `valid:\"-\"`\n \tError            string\n \tCreatedAt        time.Time\n \tUpdatedAt        time.Time\n }\n"
+                },
+                {
+                    "date": 1709681355681,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n \tID               string `valid:\"uuid\"`\n \tOutputBucketPath string `valid:\"notnull\"`\n \tStatus           string `valid:\"notnull\"`\n \tVideo            *Video `valid:\"-\"`\n-\tError            string\n+\tError            string `valid:\"notnull\"`\n \tCreatedAt        time.Time\n \tUpdatedAt        time.Time\n }\n \n"
+                },
+                {
+                    "date": 1709681370047,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,15 +10,15 @@\n \tgovalidator.SetFieldsRequiredByDefault(true)\n }\n \n type Job struct {\n-\tID               string `valid:\"uuid\"`\n-\tOutputBucketPath string `valid:\"notnull\"`\n-\tStatus           string `valid:\"notnull\"`\n-\tVideo            *Video `valid:\"-\"`\n-\tError            string `valid:\"notnull\"`\n-\tCreatedAt        time.Time\n-\tUpdatedAt        time.Time\n+\tID               string    `valid:\"uuid\"`\n+\tOutputBucketPath string    `valid:\"notnull\"`\n+\tStatus           string    `valid:\"notnull\"`\n+\tVideo            *Video    `valid:\"-\"`\n+\tError            string    `valid:\"-\"`\n+\tCreatedAt        time.Time `valid:\"-\"`\n+\tUpdatedAt        time.Time `valid:\"-\"`\n }\n \n func (job *Job) prepare() {\n \n"
+                },
+                {
+                    "date": 1709681385313,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,8 +14,9 @@\n \tID               string    `valid:\"uuid\"`\n \tOutputBucketPath string    `valid:\"notnull\"`\n \tStatus           string    `valid:\"notnull\"`\n \tVideo            *Video    `valid:\"-\"`\n+\tVideoID string `valid\n \tError            string    `valid:\"-\"`\n \tCreatedAt        time.Time `valid:\"-\"`\n \tUpdatedAt        time.Time `valid:\"-\"`\n }\n"
+                },
+                {
+                    "date": 1709681399424,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n \tID               string    `valid:\"uuid\"`\n \tOutputBucketPath string    `valid:\"notnull\"`\n \tStatus           string    `valid:\"notnull\"`\n \tVideo            *Video    `valid:\"-\"`\n-\tVideoID string `valid\n+\tVideoID          string    `valid:\"-\"`\n \tError            string    `valid:\"-\"`\n \tCreatedAt        time.Time `valid:\"-\"`\n \tUpdatedAt        time.Time `valid:\"-\"`\n }\n"
+                },
+                {
+                    "date": 1709764760934,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,7 +20,11 @@\n \tCreatedAt        time.Time `valid:\"-\"`\n \tUpdatedAt        time.Time `valid:\"-\"`\n }\n \n+func (job *Job) Validate() error {\n+\n+}\n+\n func (job *Job) prepare() {\n \n }\n"
+                },
+                {
+                    "date": 1709764791715,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n \tUpdatedAt        time.Time `valid:\"-\"`\n }\n \n func (job *Job) Validate() error {\n-\n+\t_, err := govalidator.ValidateStruct(job)\n }\n \n func (job *Job) prepare() {\n \n"
+                },
+                {
+                    "date": 1709764819785,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,8 +22,12 @@\n }\n \n func (job *Job) Validate() error {\n \t_, err := govalidator.ValidateStruct(job)\n+\n+\tif err != nil {\n+\t\treturn err\n+\t}\n }\n \n func (job *Job) prepare() {\n \n"
+                },
+                {
+                    "date": 1709764830955,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,8 +26,10 @@\n \n \tif err != nil {\n \t\treturn err\n \t}\n+\n+\treturn nil\n }\n \n func (job *Job) prepare() {\n \n"
+                },
+                {
+                    "date": 1709775217640,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,8 +20,19 @@\n \tCreatedAt        time.Time `valid:\"-\"`\n \tUpdatedAt        time.Time `valid:\"-\"`\n }\n \n+func NewJob(output string, status string, video *Video) (*Job, error) {\n+\tjob := Job{\n+\t\tOutputBucketPath: output,\n+\t\tStatus:           status,\n+\t}\n+\n+\tjob.prepare()\n+\n+\terr := job.Validate()\n+}\n+\n func (job *Job) Validate() error {\n \t_, err := govalidator.ValidateStruct(job)\n \n \tif err != nil {\n"
+                },
+                {
+                    "date": 1709775366310,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,8 +29,12 @@\n \n \tjob.prepare()\n \n \terr := job.Validate()\n+\n+\tif err != nil {\n+\t\treturn nil, err\n+\t}\n }\n \n func (job *Job) Validate() error {\n \t_, err := govalidator.ValidateStruct(job)\n"
+                },
+                {
+                    "date": 1709775550257,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -33,8 +33,10 @@\n \n \tif err != nil {\n \t\treturn nil, err\n \t}\n+\n+\treturn &job, nil\n }\n \n func (job *Job) Validate() error {\n \t_, err := govalidator.ValidateStruct(job)\n"
+                },
+                {
+                    "date": 1709776547015,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,9 @@\n import (\n \t\"time\"\n \n \t\"github.com/asaskevich/govalidator\"\n+\tuuid \"github.com/satori/go.uuid\"\n )\n \n func init() {\n \tgovalidator.SetFieldsRequiredByDefault(true)\n@@ -48,6 +49,8 @@\n \treturn nil\n }\n \n func (job *Job) prepare() {\n-\n+\tjob.ID = uuid.NewV4().String()\n+\tjob.CreatedAt = time.Now()\n+\tjob.UpdatedAt = time.Now()\n }\n"
+                }
+            ],
+            "date": 1709681279179,
+            "name": "Commit-0",
+            "content": "package domain\n\nimport (\n\t\"time\"\n\n\t\"github.com/asaskevich/govalidator\"\n)\n\nfunc init() {\n\tgovalidator.SetFieldsRequiredByDefault(true)\n}\n\ntype Job struct {\n\tID               string\n\tOutputBucketPath string\n\tStatus           string\n\tVideo            *Video\n\tError            string\n\tCreatedAt        time.Time\n\tUpdatedAt        time.Time\n}\n"
+        }
+    ]
+}

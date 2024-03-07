@@ -1,0 +1,34 @@
+{
+    "sourceFile": "domain/job_test.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 4,
+            "patches": [
+                {
+                    "date": 1709776067959,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1709776081196,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,13 +2,15 @@\n \n import (\n \t\"encoder/domain\"\n \t\"testing\"\n+\t\"time\"\n \n \tuuid \"github.com/satori/go.uuid\"\n )\n \n func TestNewJob(t *testing.T) {\n \tvideo := domain.NewVideo()\n \tvideo.ID = uuid.NewV4().String()\n \tvideo.FilePath = \"path\"\n+\tvideo.CreatedAt = time.Now()\n }\n"
+                },
+                {
+                    "date": 1709776119069,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,5 +12,7 @@\n \tvideo := domain.NewVideo()\n \tvideo.ID = uuid.NewV4().String()\n \tvideo.FilePath = \"path\"\n \tvideo.CreatedAt = time.Now()\n+\n+\tjob, err := domain.NewJob(\"path\", \"Converted\", video)\n }\n"
+                },
+                {
+                    "date": 1709776138785,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,8 +5,9 @@\n \t\"testing\"\n \t\"time\"\n \n \tuuid \"github.com/satori/go.uuid\"\n+\t\"github.com/stretchr/testify/require\"\n )\n \n func TestNewJob(t *testing.T) {\n \tvideo := domain.NewVideo()\n@@ -14,5 +15,6 @@\n \tvideo.FilePath = \"path\"\n \tvideo.CreatedAt = time.Now()\n \n \tjob, err := domain.NewJob(\"path\", \"Converted\", video)\n+\trequire.Nil(t, err)\n }\n"
+                },
+                {
+                    "date": 1709776328816,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,6 +15,7 @@\n \tvideo.FilePath = \"path\"\n \tvideo.CreatedAt = time.Now()\n \n \tjob, err := domain.NewJob(\"path\", \"Converted\", video)\n+\trequire.NotNil(t, job)\n \trequire.Nil(t, err)\n }\n"
+                }
+            ],
+            "date": 1709776067959,
+            "name": "Commit-0",
+            "content": "package domain_test\n\nimport (\n\t\"encoder/domain\"\n\t\"testing\"\n\n\tuuid \"github.com/satori/go.uuid\"\n)\n\nfunc TestNewJob(t *testing.T) {\n\tvideo := domain.NewVideo()\n\tvideo.ID = uuid.NewV4().String()\n\tvideo.FilePath = \"path\"\n}\n"
+        }
+    ]
+}
