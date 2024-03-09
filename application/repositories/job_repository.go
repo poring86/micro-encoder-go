@@ -38,6 +38,10 @@ func (repo JobRepositoryDb) Find(id string) (*domain.Job, error) {
 		return nil, fmt.Errorf("job does not exist")
 	}
 
+	// println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
+	// fmt.Printf("%p\n", &job)
+
 	return &job, nil
 }
 
