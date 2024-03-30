@@ -22,21 +22,21 @@ func NewVideoService() VideoService {
 }
 
 func (v *VideoService) Download(bucketName string) error {
-	ctx := context.Background()
-	client, err := storage.NewClient(ctx)
 
+	ctx := context.Background()
+
+	client, err := storage.NewClient(ctx)
 	if err != nil {
 		return err
 	}
 
 	bkt := client.Bucket(bucketName)
 	obj := bkt.Object(v.Video.FilePath)
-	r, err := obj.NewReader(ctx)
 
+	r, err := obj.NewReader(ctx)
 	if err != nil {
 		return err
 	}
-
 	defer r.Close()
 
 	body, err := ioutil.ReadAll(r)
@@ -128,6 +128,16 @@ func (v *VideoService) Finish() error {
 
 	return nil
 
+}
+
+func (v *VideoService) InsertVideo() error {
+	_, err := v.VideoRepository.Insert(v.Video)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func printOutput(out []byte) {
